@@ -106,12 +106,14 @@ class Bot {
 		switch ($signal) {
 			case SIGTERM:
 			case SIGUSR1:
-				fclose($this->socketServer);
-				fclose($this->incomingSocket);
-				fclose($this->outgoingSocket);
+				
 				// handle shutdown tasks
 				if ($this->child !== 0) {
 					Core::log()->error = 'Received SIGTERM / SIGUSR1';
+					fclose($this->incomingSocket);
+					fclose($this->outgoingSocket);
+					fclose($this->socketServer);
+
 					posix_kill($this->child, SIGTERM); 
 					sleep(2);
 					posix_kill($this->child, SIGKILL);
@@ -168,6 +170,7 @@ class Bot {
 	 */
 	public function work() {
 		if (VERBOSE > 0) Core::log()->info = 'Initializing finished, forking';
+
 		// register some functions
 		pcntl_signal(SIGTERM, array($this, 'signalHandler'));
 		pcntl_signal(SIGCHLD, array($this, 'signalHandler'));
@@ -375,10 +378,25 @@ class Bot {
 		while (true) {
 			self::getConnection()->postMessage(fgets($this->incomingSocket, 1024));
 			
-#			usleep(600000);
+			usleep(600000);
 		}
 	}
 	
+	/**
+	 * Adds a message to the queue
+	 *
+	 * @param	string		$message	message to add
+	 * @return	void
+	 */
+	public function queue($message, $roomID = null) {
+		if (Core::config()->config['stfu']) return;
+		$this->sendCount++;
+		if ($roomID === null) {
+			$roomID = $this->message['roomID'];
+		}
+		
+		fwrite($this->outgoingSocket, $roomID.' '.$message."\n");
+	}
 	
 	/**
 	 * @see		Bot::$connection
@@ -419,22 +437,6 @@ class Bot {
 	public function denied() {
 		$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->access_denied);
 		Core::log()->permission = $this->message['usernameraw'].' tried to use '.$this->message['text'];
-	}
-	
-	/**
-	 * Adds a message to the queue
-	 *
-	 * @param	string		$message	message to add
-	 * @return	void
-	 */
-	public function queue($message, $roomID = null) {
-		if (Core::config()->config['stfu']) return;
-		$this->sendCount++;
-		if ($roomID === null) {
-			$roomID = $this->message['roomID'];
-		}
-		
-		fwrite($this->outgoingSocket, $roomID.' '.$message."\n");
 	}
 	
 	/**
