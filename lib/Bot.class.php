@@ -110,12 +110,13 @@ class Bot {
 				// handle shutdown tasks
 				if ($this->child !== 0) {
 					Core::log()->error = 'Received SIGTERM / SIGUSR1';
-					socket_close($this->outgoingSocket);
-					socket_close($this->incomingSocket);
-					socket_close($this->socketServer);
+					fclose($this->outgoingSocket);
+					fclose($this->incomingSocket);
+					fclose($this->socketServer);
 
 					posix_kill($this->child, SIGTERM);
-					usleep(1e6/2);
+					sleep(2);
+					posix_kill($this->child, SIGKILL);
 				}
 				if ($signal === SIGTERM) exit;
 				else exit(2);
@@ -177,13 +178,9 @@ class Bot {
 		register_shutdown_function(array('Core', 'destruct'));
 		
 		$this->needRefork = true;
-		$this->socketServer = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		socket_set_option($this->socketServer, SOL_SOCKET, SO_REUSEADDR, 1);
-		socket_bind($this->socketServer, '0.0.0.0', 9001);
-		socket_listen($this->socketServer, 1);
-		$this->incomingSocket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-		socket_connect($this->incomingSocket, '127.0.0.1', 9001);
-		$this->outgoingSocket = socket_accept($this->socketServer);
+		$this->socketServer = stream_socket_server("tcp://127.0.0.1:9001", $errno, $errstr);
+		$this->incomingSocket = stream_socket_client("tcp://127.0.0.1:9001", $errno, $errstr, 30);
+		$this->outgoingSocket = stream_socket_accept($this->socketServer);
 
 		// main loop
 		while (true) {
@@ -379,7 +376,7 @@ class Bot {
 	 */
 	public function child() {
 		while (true) {
-			self::getConnection()->postMessage(socket_read($this->incomingSocket, 1024));
+			self::getConnection()->postMessage(fgets($this->incomingSocket, 1024));
 			
 			usleep(600000);
 		}
@@ -398,7 +395,7 @@ class Bot {
 			$roomID = $this->message['roomID'];
 		}
 		
-		socket_write($this->outgoingSocket, $roomID.' '.$message."\n");
+		fwrite($this->outgoingSocket, $roomID.' '.$message."\n");
 	}
 	
 	/**
