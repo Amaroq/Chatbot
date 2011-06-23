@@ -110,11 +110,11 @@ class Bot {
 				// handle shutdown tasks
 				if ($this->child !== 0) {
 					Core::log()->error = 'Received SIGTERM / SIGUSR1';
-					fclose($this->incomingSocket);
 					fclose($this->outgoingSocket);
+					fclose($this->incomingSocket);
 					fclose($this->socketServer);
 
-					posix_kill($this->child, SIGTERM); 
+					posix_kill($this->child, SIGTERM);
 					sleep(2);
 					posix_kill($this->child, SIGKILL);
 				}
