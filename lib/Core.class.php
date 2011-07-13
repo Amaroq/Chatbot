@@ -167,7 +167,10 @@ class Core {
 		self::$log->info = 'Shutting down';
 		
 		// send leave message
-		self::$bot->getConnection()->leave();
+		try {
+			self::$bot->getConnection()->leave();
+		}
+		catch (Exception $e) { }
 		if (VERBOSE > 0) self::$log->info = 'Left chat';
 		// write the configs
 		self::$config->write();

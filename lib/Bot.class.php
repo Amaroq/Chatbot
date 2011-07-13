@@ -207,7 +207,7 @@ class Bot {
 				foreach($this->data['messages'] as $this->message) {
 					// remove crap
 					$this->message['text'] = html_entity_decode(
-						preg_replace('~<a href="(.*)">(.*)</a>~U', "\${1}", 
+						preg_replace('~<a href="([^"]*)"(?:[^>]*)>(?:.*)</a>~U', "\${1}", 
 							preg_replace('~<img src="(.*)" alt="(.*)" />~U', "\${2}", 
 								$this->message['text']
 							)
