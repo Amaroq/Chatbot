@@ -20,10 +20,7 @@ class ModuleToys extends Module {
 			$bot->queue('/me '.Core::language()->toys_pacman);
 		}
 
-		if (Module::removeWhisper($bot->message['text']) == '!ping') {
-			$bot->queue('/whisper "'.$bot->message['usernameraw'].'" !pong');
-		}
-		else if (substr($bot->message['text'], 0, 5) == '!dice') {
+		if (substr($bot->message['text'], 0, 5) == '!dice') {
 			$command = substr($bot->message['text'], 5);
 			$command = explode('d', $command, 2);
 			$command[0] = min(10, $command[0]);
