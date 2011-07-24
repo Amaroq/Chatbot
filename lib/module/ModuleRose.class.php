@@ -42,6 +42,9 @@ class ModuleRose extends Module {
 			else {
 				$username = substr($t, 7);
 				$userID = $bot->lookUpUserID($username);
+				if (!$userID) {
+					return $bot->queue('/whisper "'.$bot->message['usernameraw'].'" '.Core::language()->get('user_not_found', array('{user}' => $username)));
+				}
 			}
 			if (!isset($this->config->config[$userID])) {
 				$this->config->config[$userID] = array('got' => 0, 'has' => 3, 'lastjoin' => 0, 'joins' => 0);
