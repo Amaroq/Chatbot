@@ -1,6 +1,5 @@
 <?php
 if (!defined('USERAGENT')) define('USERAGENT', 'PHP/'.phpversion().' ('.php_uname('s').' '.php_uname('r').') WCFApi/1.0');
-
 /**
  * WCFApi provides methods to externally access a WCF
  *
@@ -105,8 +104,9 @@ class WCFApi {
 	 * @return	string		Request Answer
 	 */
 	protected function setRequest() {
-		$fp = fsockopen($this->url['host'], ((isset($this->url['port'])) ? $this->url['port'] : 80), $errno, $errstr, 30);
-		if (!$fp) {
+		$sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		socket_connect($sock, $this->url['host'], ((isset($this->url['port'])) ? $this->url['port'] : 80));
+		if (!$sock) {
 			throw new Exception('Connection could not be established');
 		}
 
@@ -124,20 +124,23 @@ class WCFApi {
 			}
 			$request = substr($request,0,-1);
 		}
-		fputs($fp, "POST ".$this->url['path'].((!empty($this->url['query'])) ? '?'.$this->url['query'] : '')." HTTP/1.1\r\n");
-		fputs($fp, "Host: ".$this->url['host']."\r\n");
-		fputs($fp, "Content-type: application/x-www-form-urlencoded\r\n");
-		fputs($fp, "User-Agent: ".USERAGENT."\r\n");
-		fputs($fp, "Content-length: ".strlen($request)."\r\n");
-		fputs($fp, "Cookie: ".$this->cookiePrefix."userID=".$this->userID."; ".$this->cookiePrefix."password=".$this->cookiePassword.(($this->sessionID != '') ? "; ".$this->cookiePrefix."cookieHash=".$this->sessionID : '')."\r\n");
-		fputs($fp, "Connection: close\r\n\r\n");
-		fputs($fp, $request."\r\n\r\n");
+		$data = "POST ".$this->url['path'].((!empty($this->url['query'])) ? '?'.$this->url['query'] : '')." HTTP/1.1\r\n"
+		."Host: ".$this->url['host']."\r\n"
+		."Content-type: application/x-www-form-urlencoded\r\n"
+		."User-Agent: ".USERAGENT."\r\n"
+		."Content-length: ".strlen($request)."\r\n"
+		."Cookie: ".$this->cookiePrefix."userID=".$this->userID."; ".$this->cookiePrefix."password=".$this->cookiePassword.(($this->sessionID != '') ? "; ".$this->cookiePrefix."cookieHash=".$this->sessionID : '')."\r\n"
+		."Connection: close\r\n\r\n"
+		.$request."\r\n\r\n";
+		socket_send($sock, $data, strlen($data), 0);
 
 		$result = '';
-		while (!feof($fp)) {
-			$result .= fgets($fp);
+		do {
+			$piece = socket_read($sock, 1024);
+			$result .= $piece;
 		}
-		fclose($fp);
+		while($piece != '');
+		socket_close($sock);
 
 		// TODO: Add Header Validation for 404, 403, 401, 500 etc.
 		return $this->unchunkHTTP($result);
@@ -149,8 +152,9 @@ class WCFApi {
 	 * @return	string		Request Answer
 	 */
 	protected function setUploadRequest() {
-		$fp = fsockopen($this->url['host'], ((isset($this->url['port'])) ? $this->url['port'] : 80), $errno, $errstr, 30);
-		if (!$fp) {
+		$sock = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+		socket_connect($sock, $this->url['host'], ((isset($this->url['port'])) ? $this->url['port'] : 80));
+		if (!$sock) {
 			throw new Exception('Connection could not be established');
 		}
 		
@@ -188,19 +192,22 @@ class WCFApi {
 		$request .= "--".$boundary."--";
 
 
-		fputs($fp, "POST ".$this->url['path'].((!empty($this->url['query'])) ? '?'.$this->url['query'] : '')." HTTP/1.0\r\n");
-		fputs($fp, "Host: ".$this->url['host']."\r\n");
-		fputs($fp, "Content-Type: multipart/form-data; boundary=".$boundary."\r\n");
-		fputs($fp, "User-Agent: ".self::USERAGENT."\r\n");
-		fputs($fp, "Content-length: ".strlen($request)."\r\n");
-		fputs($fp, "Cookie: ".$this->cookiePrefix."userID=".$this->userID."; ".$this->cookiePrefix."password=".$this->cookiePassword.(($this->sessionID != '') ? "; ".$this->cookiePrefix."cookieHash=".$this->sessionID : '')."\r\n\r\n");
-		fputs($fp, $request."\r\n\r\n");
+		$data = "POST ".$this->url['path'].((!empty($this->url['query'])) ? '?'.$this->url['query'] : '')." HTTP/1.1\r\n"
+		."Host: ".$this->url['host']."\r\n"
+		."Content-Type: multipart/form-data; boundary=".$boundary."\r\n"
+		."User-Agent: ".self::USERAGENT."\r\n"
+		."Content-length: ".strlen($request)."\r\n"
+		."Cookie: ".$this->cookiePrefix."userID=".$this->userID."; ".$this->cookiePrefix."password=".$this->cookiePassword.(($this->sessionID != '') ? "; ".$this->cookiePrefix."cookieHash=".$this->sessionID : '')."\r\n\r\n"
+		.$request."\r\n\r\n";
+		socket_send($sock, $data, strlen($data), 0);
 
 		$result = '';
-		while (!feof($fp)) {
-			$result .= fgets($fp);
+		do {
+			$piece = socket_read($sock, 1024);
+			$result .= $piece;
 		}
-		fclose($fp);
+		while($piece != '');
+		socket_close($sock);
 
 		// TODO: Add Header Validation for 404, 403, 401, 500 etc.
 		return $this->unchunkHTTP($result);
