@@ -1,0 +1,3 @@
+[submodule "lib/3rdParty/wcfapi"]
+	path = lib/3rdParty/wcfapi
+	url = git://github.com/TimWolla/WCFApi.git

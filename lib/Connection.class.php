@@ -1,4 +1,5 @@
 <?php
+require_once(DIR.'lib/3rdParty/wcfapi/WCFApi.class.php');
 define('USERAGENT', 'PHP/'.phpversion().' ('.php_uname('s').' '.php_uname('r').') Chatbot/2.0');
 if (!defined('API_KEY')) define('API_KEY', '');
 
