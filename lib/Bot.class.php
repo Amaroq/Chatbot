@@ -116,7 +116,7 @@ class Bot {
 					fclose($this->outgoingSocket);
 					fclose($this->incomingSocket);
 					fclose($this->socketServer);
-
+					unlink(DIR.'data.sock');
 				}
 				if ($signal === SIGTERM) exit;
 				else exit(2);
