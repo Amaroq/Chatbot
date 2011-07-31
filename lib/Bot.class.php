@@ -178,9 +178,10 @@ class Bot {
 		register_shutdown_function(array('Core', 'destruct'));
 		
 		$this->needRefork = true;
-		$this->socketServer = stream_socket_server("tcp://127.0.0.1:9001", $errno, $errstr);
-		$this->incomingSocket = stream_socket_client("tcp://127.0.0.1:9001", $errno, $errstr, 30);
+		$this->socketServer = stream_socket_server('unix://'.DIR.'data.sock', $errno, $errstr);
+		$this->incomingSocket = stream_socket_client('unix://'.DIR.'data.sock', $errno, $errstr, 30);
 		$this->outgoingSocket = stream_socket_accept($this->socketServer);
+		stream_set_blocking($this->outgoingSocket, 0);
 
 		// main loop
 		while (true) {
