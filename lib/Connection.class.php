@@ -80,7 +80,7 @@ class Connection extends WCFApi {
 	public function getRooms() {
 		$this->url['query'] = 'page=ChatRefreshRoomList';
 		$data = $this->setRequest();
-		preg_match_all('~<option id="room([0-9]+)Option" value="room(?:[0-9]+)-(?:.*)"(?: selected="selected")?>(.*)</option>~Ui', $data, $matches);
+		preg_match_all('~<a class="room([0-9]+)-([^"]+)">~Ui', $data, $matches);
 		
 		$rooms = array();
 		for ($i = 0, $max = count($matches[0]); $i < $max; $i++) {
