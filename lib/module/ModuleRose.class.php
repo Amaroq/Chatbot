@@ -30,7 +30,7 @@ class ModuleRose extends Module {
 				if ($this->config->config[$userID]['joins'] >= 5) {
 					$this->config->config[$userID]['joins'] = 0;
 					$this->config->config[$userID]['has']++;
-					$bot->queue('/whisper "'.$bot->message['usernameraw'].'" Du kannst jetzt '.$this->config->config[$userID]['has'].' Rosen verteilen: !rose Benutzername');
+					$bot->queue('/whisper '.$bot->message['usernameraw'].', Du kannst jetzt '.$this->config->config[$userID]['has'].' Rosen verteilen: !rose Benutzername');
 				}
 			}
 		}
@@ -43,13 +43,13 @@ class ModuleRose extends Module {
 				$username = substr($t, 7);
 				$userID = $bot->lookUpUserID($username);
 				if (!$userID) {
-					return $bot->queue('/whisper "'.$bot->message['usernameraw'].'" '.Core::language()->get('user_not_found', array('{user}' => $username)));
+					return $bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->get('user_not_found', array('{user}' => $username)));
 				}
 			}
 			if (!isset($this->config->config[$userID])) {
 				$this->config->config[$userID] = array('got' => 0, 'has' => 3, 'lastjoin' => 0, 'joins' => 0);
 			}
-			$bot->queue('/whisper "'.$bot->message['usernameraw'].'" '.$username.' hat bisher '.$this->config->config[$userID]['got']. ' Rosen erhalten und kann noch '.$this->config->config[$userID]['has'].' Stück verteilen.');
+			$bot->queue('/whisper '.$bot->message['usernameraw'].', '.$username.' hat bisher '.$this->config->config[$userID]['got']. ' Rosen erhalten und kann noch '.$this->config->config[$userID]['has'].' Stück verteilen.');
 		}
 		else if (substr($bot->message['text'], 0, 6) == '!rose ') {
 			$userID = $bot->lookUpUserID();
@@ -70,15 +70,15 @@ class ModuleRose extends Module {
 						$bot->queue('['.$bot->message['usernameraw'].'] hat eine Rose an '.$username.' gegeben');
 					}
 					else {
-						$bot->queue('/whisper "'.$bot->message['usernameraw'].'" Du kannst dir nicht selber eine Rose geben');
+						$bot->queue('/whisper '.$bot->message['usernameraw'].', Du kannst dir nicht selber eine Rose geben');
 					}
 				}
 				else {
-					$bot->queue('/whisper "'.$bot->message['usernameraw'].'" '.Core::language()->get('user_not_found', array('{user}' => $username)));
+					$bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->get('user_not_found', array('{user}' => $username)));
 				}
 			}
 			else {
-				$bot->queue('/whisper "'.$bot->message['usernameraw'].'" Du hast keine Rosen');
+				$bot->queue('/whisper '.$bot->message['usernameraw'].', Du hast keine Rosen');
 			}
 		}
 	}

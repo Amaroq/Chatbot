@@ -50,7 +50,7 @@ class ModuleDictionary extends Module {
 			if (Core::compareLevel($bot->lookUpUserID(), 'dic.list')) {
 				$entries = array_keys($this->config->config);
 				sort($entries);
-				$bot->queue('/whisper "'.$bot->message['usernameraw'].'" '.Core::language()->dic_listdic.': '.implode(', ', $entries));
+				$bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->dic_listdic.': '.implode(', ', $entries));
 			}
 			else {
 				$bot->denied();

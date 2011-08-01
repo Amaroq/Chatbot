@@ -35,7 +35,7 @@ class ModuleApt extends Module {
 				}
 				else {
 					$name = 'module_error_'.$result;
-					$bot->queue('/whisper "'.$bot->message['usernameraw'].'" '.Core::language()->$name);
+					$bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->$name);
 				}
 			break;
 			case 'remove':
@@ -49,7 +49,7 @@ class ModuleApt extends Module {
 				}
 				else {
 					$name = 'module_error_'.$result;
-					$bot->queue('/whisper "'.$bot->message['usernameraw'].'" '.Core::language()->$name);
+					$bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->$name);
 				}
 			break;
 			case 'upgrade':

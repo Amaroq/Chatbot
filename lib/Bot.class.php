@@ -225,7 +225,7 @@ class Bot {
 							}
 							else {
 								$name = 'module_error_'.$result;
-								$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->$name);
+								$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->$name);
 							}
 						}
 						else {
@@ -241,7 +241,7 @@ class Bot {
 							}
 							else {
 								$name = 'module_error_'.$result;
-								$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->$name);
+								$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->$name);
 							}
 						}
 						else {
@@ -257,7 +257,7 @@ class Bot {
 							}
 							else {
 								$name = 'module_error_'.$result;
-								$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->$name);
+								$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->$name);
 							}
 						}
 						else {
@@ -276,7 +276,7 @@ class Bot {
 								$this->success();
 							}
 							else {
-								$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->get('user_not_found', array('{user}' => $user)));
+								$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->get('user_not_found', array('{user}' => $user)));
 							}
 						}
 						else {
@@ -294,7 +294,7 @@ class Bot {
 								$this->success();
 							}
 							else {
-								$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->get('user_not_found', array('{user}' => $user)));
+								$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->get('user_not_found', array('{user}' => $user)));
 							}
 						}
 						else {
@@ -315,7 +315,7 @@ class Bot {
 								$this->success();
 							}
 							else {
-								$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->get('user_not_found', array('{user}' => $user)));
+								$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->get('user_not_found', array('{user}' => $user)));
 							}
 						}
 						else {
@@ -379,7 +379,7 @@ class Bot {
 		while (true) {
 			self::getConnection()->postMessage(fgets($this->incomingSocket, 1024));
 			
-			usleep(600000);
+//			usleep(600000);
 		}
 	}
 	
@@ -427,7 +427,7 @@ class Bot {
 	 * @return	void
 	 */
 	public function success() {
-		$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->success);
+		$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->success);
 	}
 	
 	/**
@@ -436,7 +436,7 @@ class Bot {
 	 * @return	void
 	 */
 	public function denied() {
-		$this->queue('/whisper "'.$this->message['usernameraw'].'" '.Core::language()->access_denied);
+		$this->queue('/whisper '.$this->message['usernameraw'].', '.Core::language()->access_denied);
 		Core::log()->permission = $this->message['usernameraw'].' tried to use '.$this->message['text'];
 	}
 	

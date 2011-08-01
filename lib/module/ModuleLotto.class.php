@@ -101,7 +101,7 @@ class ModuleLotto extends Module {
 			}
 		}
 		if (count($numbers) != $this->numbers) {
-			$this->bot->queue('/whisper "' . $nickname . '" Deine Zahlen sind ungültig.');
+			$this->bot->queue('/whisper '.$nickname.', Deine Zahlen sind ungültig.');
 			unset($this->players[$nickname]);
 		} else {
 			$this->bot->success();
