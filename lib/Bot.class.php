@@ -89,7 +89,7 @@ class Bot {
 	const GLOBALMESSAGE = 11;
 	
 	public function __construct() {
-		$this->connection = new Connection(SERVER, ID, null, null, HASH);
+		$this->connection = new Connection(SERVER, ID, null, null, HASH, PREFIX);
 		$this->connection->getSecurityToken();
 		preg_match("/new Chat\(([0-9]+)/", $this->connection->joinChat(), $matches);
 		$this->id = $matches[1];
