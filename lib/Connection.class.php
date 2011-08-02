@@ -36,9 +36,9 @@ class Connection extends WCFApi {
 			'enablesmilies' => 1,
 			'ajax' => 1,
 			'room' => $roomID,
-			'key' => API_KEY,
-			'enableHTML' => $enableHTML
+			'key' => API_KEY
 		);
+		if ($enableHTML) $this->request['enableHTML'] = true;
 
 		$this->setRequest(false);
 	}
