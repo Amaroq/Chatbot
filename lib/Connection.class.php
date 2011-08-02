@@ -27,7 +27,7 @@ class Connection extends WCFApi {
 	 * @param	string		$message	message to send
 	 * @return	void
 	 */
-	public function postMessage($message) {
+	public function postMessage($message, $enableHTML = false) {
 		if (strpos($message, ' ') === false) return;
 		list($roomID, $message) = explode(' ', $message, 2);
 		$this->url['query'] = 'form=Chat'.(API_KEY != '' ? 'Bot' : ''); 
@@ -36,7 +36,8 @@ class Connection extends WCFApi {
 			'enablesmilies' => 1,
 			'ajax' => 1,
 			'room' => $roomID,
-			'key' => API_KEY
+			'key' => API_KEY,
+			'enableHTML' => $enableHTML
 		);
 
 		$this->setRequest(false);
