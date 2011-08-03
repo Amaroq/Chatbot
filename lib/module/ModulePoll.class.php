@@ -11,7 +11,8 @@ class ModulePoll extends Module {
 	protected $voteActive = false;
 	protected $voted = array();
 	protected $voteStart = 0;
-	
+	protected $voteRoom = 0;
+
 	public function destruct() {
 
 	}	
@@ -31,6 +32,7 @@ class ModulePoll extends Module {
 			$bot->queue('Ihr habt 30 Sekunden Zeit um abzustimmen');
 			$this->voteActive = true;
 			$this->voteStart = time();
+			$this->voteRoom = $bot->message['roomID'];
 		}
 		else if (substr($bot->message['text'], 0, 6) == '!vote ') {
 			Bot::queue('/whisper '.$bot->message['usernameraw'].', Es läuft gerade eine Abstimmung');
@@ -48,8 +50,8 @@ class ModulePoll extends Module {
 	}
 	
 	protected function end(Bot $bot) {
-		$bot->queue('Die Abstimmung ist beendet');
-		$bot->queue('Es haben '.$this->yes.' Leute für Ja und '.$this->no.' für Nein gestimmt');
+		$bot->queue('Die Abstimmung ist beendet', $this->voteRoom);
+		$bot->queue('Es haben '.$this->yes.' Leute für Ja und '.$this->no.' für Nein gestimmt', $this->voteRoom);
 		$this->reset();
 	}
 }
