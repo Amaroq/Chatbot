@@ -62,7 +62,7 @@ class ModuleYoutube extends Module {
 				$this->cache[$id] = false;
 			}
 			else {
-				$this->cache[$id] = $matches[1];
+				$this->cache[$id] = html_entity_decode($matches[1]);
 			}
 		}
 		
