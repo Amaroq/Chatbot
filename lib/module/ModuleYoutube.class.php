@@ -15,6 +15,8 @@ class ModuleYoutube extends Module {
 	public function handle(Bot $bot) {
 		if ($bot->message['id'] % 2500 == 0) $this->cache = array();
 		if ($bot->message['usernameraw'] == NAME) return;
+		if ($bot->message['text'] != self::removeWhisper($bot->message['text'])) return;
+
 		if (preg_match_all('~http://(?:.+\.)?youtu(?:\.be/|be\.com/watch\?(?:.*)v=)([a-zA-Z0-9_-]+?)~U', $bot->message['text'], $matches))
 		foreach ($matches[1] as $id) {
 			$title = $this->lookUp($id);
