@@ -43,6 +43,13 @@ class ModuleOp extends Module {
 			}
 			$bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->op_perms.': '.implode(', ', $permString));
 		}
+		else if (Module::removeWhisper($bot->message['text']) == '!temproom') {
+			if (!Core::compareLevel($bot->lookUpUserID(), 'op.join')) return $bot->denied();
+			$bot->getConnection()->postMessage($bot->message['roomID'].' /temproom');
+			$rooms = array_keys($bot->getConnection()->getRooms());
+			$room = end($rooms);
+			$bot->getConnection()->join($room);
+		}
 		else if (Module::removeWhisper($bot->message['text']) == '!rooms') {
 			if (!Core::compareLevel($bot->lookUpUserID(), 'op.join')) return $bot->denied();
 			$rooms = $bot->getConnection()->getRooms();
