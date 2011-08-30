@@ -30,16 +30,22 @@ class ModuleUtil extends Module {
 			$bot->queue(Core::language()->util_sent.": ".$bot->sendCount.' ('.round($bot->sendCount / (time() - TIME) * 60, 4).'/m)');
 			$bot->queue('Speicherauslastung: '.$formatFileSize(memory_get_usage()).'; Hoechststand: '.$formatFileSize(memory_get_peak_usage()));
 		}
-		else if (substr($bot->message['text'], 0, 8) == '!summon ') {
+		else if (substr($bot->message['text'], 0, 8) == '!summon ' || $bot->message['text'] == '!summon') {
 			if (!Core::compareLevel($bot->lookUpUserID(), 'util.summon')) return $bot->denied();
-			$roomID = substr($bot->message['text'], 8);
+			if ($bot->message['text'] == '!summon') {
+				$roomID = $bot->message['roomID'];
+			}
+			else {
+				$roomID = substr($bot->message['text'], 8);
+			}
 			$currentRoom = $bot->getConnection()->getCurrentRoom();
 			$bot->getConnection()->postMessage($currentRoom.' /invite '.NAME);
 			$bot->getConnection()->join($bot->message['roomID']);
 			$users = $bot->data['users'];
 			// clean up
 			foreach ($users as $key => $val) {
-				if ($val['roomID'] != $bot->message['roomID']) continue;
+				if ($val['roomID'] == $bot->message['roomID'] && $bot->message['text'] == '!summon') continue;
+				if ($val['roomID'] != $bot->message['roomID'] && $bot->message['text'] != '!summon') continue;
 				if ($val['usernameraw'] == NAME) continue;
 				$bot->queue('/move '.$val['usernameraw'].' '.$roomID);
 			}
