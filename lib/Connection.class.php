@@ -90,6 +90,14 @@ class Connection extends WCFApi {
 		return $rooms;
 	}
 
+	public function getCurrentRoom() {
+		$this->url['query'] = 'page=ChatRefreshRoomList';
+                $data = $this->setRequest();
+		preg_match('~<li class="active" id="room([0-9]+)Item">~', $data, $match);
+		
+		return $match[1];
+	}
+
 	/**
 	 * Leaves the chat
 	 *

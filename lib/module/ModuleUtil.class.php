@@ -30,5 +30,20 @@ class ModuleUtil extends Module {
 			$bot->queue(Core::language()->util_sent.": ".$bot->sendCount.' ('.round($bot->sendCount / (time() - TIME) * 60, 4).'/m)');
 			$bot->queue('Speicherauslastung: '.$formatFileSize(memory_get_usage()).'; Hoechststand: '.$formatFileSize(memory_get_peak_usage()));
 		}
+		else if (substr($bot->message['text'], 0, 8) == '!summon ') {
+			if (!Core::compareLevel($bot->lookUpUserID(), 'util.summon')) return $bot->denied();
+			$roomID = substr($bot->message['text'], 8);
+			$currentRoom = $bot->getConnection()->getCurrentRoom();
+			$bot->getConnection()->postMessage($currentRoom.' /invite '.NAME);
+			$bot->getConnection()->join($bot->message['roomID']);
+			$users = $bot->data['users'];
+			// clean up
+			foreach ($users as $key => $val) {
+				if ($val['roomID'] != $bot->message['roomID']) continue;
+				if ($val['usernameraw'] == NAME) continue;
+				$bot->queue('/move '.$val['usernameraw'].' '.$roomID);
+			}
+			$bot->getConnection()->join($currentRoom);
+		}
 	}
 }
