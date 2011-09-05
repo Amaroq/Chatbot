@@ -83,4 +83,4 @@ class ModuleRose extends Module {
 		}
 	}
 }
-?>
+

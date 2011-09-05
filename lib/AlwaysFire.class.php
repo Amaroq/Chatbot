@@ -7,4 +7,3 @@
  * @licence	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
 interface AlwaysFire { }
-?>

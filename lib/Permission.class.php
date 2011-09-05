@@ -51,4 +51,3 @@ class Permission {
 		return $this->config->config;
 	}
 }
-?>

@@ -44,4 +44,3 @@ class Log {
 		unlink(DIR.'log/'.$log);
 	}
 }
-?>

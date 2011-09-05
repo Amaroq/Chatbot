@@ -40,4 +40,4 @@ class ModuleGoogle extends Module {
 		return json_decode($result, true);
 	}
 }
-?>
+

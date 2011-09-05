@@ -80,4 +80,4 @@ class ModuleToys extends Module {
 		}
 	}
 }
-?>
+

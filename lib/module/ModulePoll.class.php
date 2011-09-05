@@ -55,4 +55,4 @@ class ModulePoll extends Module {
 		$this->reset();
 	}
 }
-?>
+

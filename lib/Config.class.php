@@ -87,4 +87,3 @@ class Config {
 		return $a1;
 	}
 }
-?>

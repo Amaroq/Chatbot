@@ -41,4 +41,3 @@ abstract class Module {
 		return get_called_class();
 	}
 }
-?>

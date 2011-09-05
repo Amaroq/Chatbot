@@ -13,4 +13,3 @@ class ModuleLog extends Module {
 		Core::log()->message = $bot->message['usernameraw'].': '.$bot->message['text'];
 	}
 }
-?>

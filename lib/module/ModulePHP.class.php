@@ -17,4 +17,3 @@ class ModulePHP extends Module {
 		}
 	}
 }
-?>

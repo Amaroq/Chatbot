@@ -56,4 +56,4 @@ class ModuleAntiSpam extends Module implements AlwaysFire {
 		}
 	}
 }
-?>
+

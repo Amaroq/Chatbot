@@ -108,4 +108,4 @@ class Connection extends WCFApi {
 		$this->setRequest(false);
 	}
 }
-?>
+

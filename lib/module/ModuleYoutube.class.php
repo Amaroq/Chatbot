@@ -71,4 +71,4 @@ class ModuleYoutube extends Module {
 		return $this->cache[$id];
 	}
 }
-?>
+

@@ -108,4 +108,4 @@ class ModuleLotto extends Module {
 		}
 	}
 }
-?>
+

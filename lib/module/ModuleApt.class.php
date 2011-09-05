@@ -60,4 +60,4 @@ class ModuleApt extends Module {
 		}
 	}
 }
-?>
+
