@@ -31,6 +31,7 @@ userdata.php with the following contents::
 	define('ID', 2); // UserID of the bot-user
 	define('NAME', 'Chatbot'); // Username of the bot-user
 	define('HASH', '7421afc131519d342cd7ab097acfb20ef0143693'); // the login cookie of the bot
+	define('PREFIX', 'wcf_'); // The cookie-prefix of the board
     ?>
 	
 After that you can run the bot on the Commandline-Interpreter (CLI) of PHP by
@@ -41,15 +42,13 @@ the following command::
 	
 The bot will create needed directories and forks itself afterwards. From that
 time there will always be two processes. After that you will have to grant
-yourself Operator privilegies (OP). You can do it by creating a file called say
-in the directory of the chatbot.php. The say-file must have the following
-content::
+yourself Operator privilegies (OP). You can do that by typing the following command
+into the CLI-STDIN::
     
 	!level YourUsername 500
 	
-The bot will post that message in the Chat and afterwards grants you OP. The
-say-file will be deleted after posting. From now on you can configure it fully
-via special commands.
+The bot will now parse the message internally and grants you OP. From now on you can 
+configure it fully via special commands.
 
 
 Best regards,
