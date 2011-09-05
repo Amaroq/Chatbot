@@ -189,6 +189,7 @@ class Core {
 		}
 		if (VERBOSE > 0) self::$log->info = 'Cleaned cache';
 		unlink(DIR.'bot.pid');
+		@unlink(DIR.'data.sock');
 	}
 	
 	/**
