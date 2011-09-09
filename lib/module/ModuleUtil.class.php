@@ -47,8 +47,10 @@ class ModuleUtil extends Module {
 				if ($val['roomID'] == $bot->message['roomID'] && $bot->message['text'] == '!summon') continue;
 				if ($val['roomID'] != $bot->message['roomID'] && $bot->message['text'] != '!summon') continue;
 				if ($val['usernameraw'] == NAME) continue;
+
 				$bot->queue('/move '.$val['usernameraw'].' '.$roomID);
 			}
+			sleep(1);
 			$bot->getConnection()->join($currentRoom);
 		}
 	}
