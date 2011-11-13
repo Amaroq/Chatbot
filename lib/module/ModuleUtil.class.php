@@ -50,7 +50,7 @@ class ModuleUtil extends Module {
 
 				$bot->queue('/move '.$val['usernameraw'].' '.$roomID);
 			}
-			uleep(max(20, count($users)) * 1e6 / 20);
+			usleep(max(20, count($users)) * 1e6 / 20);
 			$bot->getConnection()->join($currentRoom);
 		}
 	}
