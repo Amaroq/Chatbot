@@ -238,14 +238,20 @@ class Core {
 		$address = 'Module'.substr(sha1(rand()), 0, 8);
 		$data = str_replace('class Module'.$module.' ',  "// Module is: ".$module."\nclass ".$address.' ', file_get_contents(DIR.'lib/module/Module'.$module.'.class.php'));
 		file_put_contents(DIR.'cache/'.$address.'.class.php', $data);
-
+		
+		// check syntax
+		if (!php_check_syntax(DIR.'cache/'.$address.'.class.php')) {
+			self::log()->error = 'Tried to load Module '.$module.'@'.$address.' but it contains syntax errors.';
+			return self::NO_MODULE;
+		}
+		
 		// now load
 		require_once(DIR.'cache/'.$address.'.class.php');
 		self::$modules[$module] = new $address();
 		
 		// check whether it is really a module
 		if (!self::$modules[$module] instanceof Module) {
-			self::log()->error = 'Tried to load Module '.$module.' but it is no module, unloading';
+			self::log()->error = 'Tried to load Module '.$module.'@'.$address.' but it is no module, unloading';
 			self::unloadModule($module);
 			return self::NO_MODULE;
 		}
@@ -253,7 +259,7 @@ class Core {
 		self::config()->config['modules'][$module] = $module;
 		self::config()->write();
 		
-		self::log()->info = 'Loaded module '.$module.' @ '.$address;
+		self::log()->info = 'Loaded module '.$module.'@'.$address;
 		return $address;
 	}
 	
@@ -279,7 +285,7 @@ class Core {
 		unset(self::config()->config['modules'][$module]);
 		self::config()->write();
 		
-		self::log()->info = 'Unloaded module '.$module.' @ '.$address;
+		self::log()->info = 'Unloaded module '.$module.'@'.$address;
 		
 		return $module;
 	}
