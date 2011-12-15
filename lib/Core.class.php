@@ -240,10 +240,10 @@ class Core {
 		file_put_contents(DIR.'cache/'.$address.'.class.php', $data);
 		
 		// check syntax
-		if (!php_check_syntax(DIR.'cache/'.$address.'.class.php')) {
+		/*if (!php_check_syntax(DIR.'cache/'.$address.'.class.php')) {
 			self::log()->error = 'Tried to load Module '.$module.'@'.$address.' but it contains syntax errors.';
 			return self::NO_MODULE;
-		}
+		}*/
 		
 		// now load
 		require_once(DIR.'cache/'.$address.'.class.php');
