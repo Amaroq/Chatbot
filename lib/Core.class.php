@@ -212,11 +212,23 @@ class Core {
 		}
 		return ((!isset(self::config()->config['levels'][$userID]) && $level == 0) || (isset(self::config()->config['levels'][$userID]) && self::config()->config['levels'][$userID] >= $level));
 	}
-
+	
+	/**
+	 * Checks the syntax of the given file
+	 *
+	 * @param	string	$file	file to check
+	 * @return	boolean		success
+	 */
+	public static function php_check_syntax($file) {
+		exec('php -l '.$file, $error, $code);
+		if ($code == 0) return true;
+		return false;
+	}
+	
 	/**
 	 * Loads the given module
 	 *
-	 * @var		string		$module		module-name
+	 * @param	string		$module		module-name
 	 * @return	string				module-address
 	 */
 	public static function loadModule($module) {
@@ -240,10 +252,10 @@ class Core {
 		file_put_contents(DIR.'cache/'.$address.'.class.php', $data);
 		
 		// check syntax
-		/*if (!php_check_syntax(DIR.'cache/'.$address.'.class.php')) {
-			self::log()->error = 'Tried to load Module '.$module.'@'.$address.' but it contains syntax errors.';
+		if (!self::php_check_syntax(DIR.'cache/'.$address.'.class.php')) {
+			self::log()->error = 'Tried to load Module '.$module.'@'.$address.' but it contains syntax errors';
 			return self::NO_MODULE;
-		}*/
+		}
 		
 		// now load
 		require_once(DIR.'cache/'.$address.'.class.php');
