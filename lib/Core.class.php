@@ -220,6 +220,7 @@ class Core {
 	 * @return	boolean		success
 	 */
 	public static function php_check_syntax($file) {
+		return true;
 		exec('php -l '.$file, $error, $code);
 		if ($code == 0) return true;
 		return false;
