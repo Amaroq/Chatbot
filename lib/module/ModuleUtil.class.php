@@ -24,11 +24,18 @@ class ModuleUtil extends Module {
 				}
 				return round($size, 4).' '.$types[$type];
 			};
+			$configSize = function() {
+				$configs = glob(DIR.'config/*');
+				$size = 0;
+				foreach ($configs as $config) $size += filesize($config);
+				return $size;
+			};
 			$bot->queue(Core::language()->util_information.':');
 			$bot->queue(Core::language()->util_since.": ".date('d.m.Y H:i:s', TIME));
 			$bot->queue(Core::language()->util_got.": ".$bot->messageCount.' ('.round($bot->messageCount / (time() - TIME) * 60, 4).'/m)');
 			$bot->queue(Core::language()->util_sent.": ".$bot->sendCount.' ('.round($bot->sendCount / (time() - TIME) * 60, 4).'/m)');
 			$bot->queue('Speicherauslastung: '.$formatFileSize(memory_get_usage()).'; Hoechststand: '.$formatFileSize(memory_get_peak_usage()));
+			$bot->queue('Datenbankgroesze: '.$formatFileSize($configSize()));
 		}
 		else if (substr($bot->message['text'], 0, 8) == '!summon ' || $bot->message['text'] == '!summon') {
 			if (!Core::compareLevel($bot->lookUpUserID(), 'util.summon')) return $bot->denied();
