@@ -22,7 +22,15 @@ class ModuleOp extends Module {
 		}
 		else if (substr(Module::removeWhisper($bot->message['text']), 0, 5) == '!say ') {
 			if (!Core::compareLevel($bot->lookUpUserID(), 500)) return $bot->denied();
-			$bot->queue(substr(Module::removeWhisper($bot->message['text']), 5));
+			$parts = explode(' ', substr(Module::removeWhisper($bot->message['text']), 5), 2);
+			if (!is_numeric($parts[0])) {
+				$roomID = null;
+				$message = implode(' ', $parts);
+			}
+			else {
+				list($roomID, $message) = $parts;
+			}
+			$bot->queue($message, $roomID);
 		}
 		else if (Module::removeWhisper($bot->message['text']) == '!loaded') {
 			if (!Core::compareLevel($bot->lookUpUserID(), 'op.load')) return $bot->denied();
