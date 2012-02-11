@@ -17,8 +17,8 @@ class ModuleOp extends Module {
 		}
 		else if (Module::removeWhisper($bot->message['text']) == '!restart') {
 			if (!Core::compareLevel($bot->lookUpUserID(), 'op.shutdown')) return $bot->denied();
-                        Core::log()->info = $bot->message['usernameraw'].' restarted the bot';
-                        $bot->shutdown(SIGUSR1);
+			Core::log()->info = $bot->message['usernameraw'].' restarted the bot';
+			$bot->shutdown(SIGUSR1);
 		}
 		else if (substr(Module::removeWhisper($bot->message['text']), 0, 5) == '!say ') {
 			if (!Core::compareLevel($bot->lookUpUserID(), 500)) return $bot->denied();
