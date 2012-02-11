@@ -35,7 +35,7 @@ class ModulePoll extends Module {
 			$this->voteRoom = $bot->message['roomID'];
 		}
 		else if (substr($bot->message['text'], 0, 6) == '!vote ') {
-			Bot::queue('/whisper '.$bot->message['usernameraw'].', Es läuft gerade eine Abstimmung');
+			$bot->queue('/whisper '.$bot->message['usernameraw'].', Es läuft gerade eine Abstimmung');
 		}
 		else if ($this->voteActive && $bot->message['text'] == '!yes' && !in_array($bot->message['usernameraw'], $this->voted)) {
 			$this->yes++;
