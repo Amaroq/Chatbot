@@ -17,19 +17,28 @@ class ModuleTournament extends Module {
 		$this->joined = array();
 	}
 	public function handle(Bot $bot) {
-		if ($this->joinActive && (count($this->joined) >= $this->maxUsers || $bot->message['text'] == '!endjoin')) {
-			if (count($this->joined) < $this->maxUsers && !Core::compareLevel($bot->lookUpUserID(), 'tournament.start')) return $bot->denied();
+		if ($this->joinActive && (count($this->joined) >= $this->maxUsers || substr($bot->message['text'], 0, 8) == '!endjoin')) {
+			if (substr($bot->message['text'], 0, 8) == '!endjoin' && !Core::compareLevel($bot->lookUpUserID(), 'tournament.start')) return $bot->denied();
+			if (substr($bot->message['text'], 0, 8) == '!endjoin') {
+				if ($bot->message['text'] != '!endjoin force') {
+					if (intval(log(count($this->joined)) / log($this->teamSize)) != log(count($this->joined)) / log($this->teamSize)) {
+						$bot->queue('Es sind '.count($this->joined).' Spieler beigetreten. Es müssten aber '.pow($this->teamSize, ceil(log(count($this->joined)) / log($this->teamSize))).' Spieler für gleich große Paarungen sein.');
+						$bot->queue('Benutze !endjoin force um dennoch fortzufahren');
+						return;
+					}
+				}
+			}
 			$this->end($bot);
 		}
 		if (substr($bot->message['text'], 0, 12) == '!tournament ' && !$this->joinActive) {
 			if (!Core::compareLevel($bot->lookUpUserID(), 'tournament.start')) return $bot->denied();
 			$params = explode(' ', substr($bot->message['text'], 12));
 			if (!isset($params[0])) return;
-			if (!isset($params[1])) return;
+			if (!isset($params[1])) $params[1] = 9001;
 			$this->teamSize = $params[0];
 			$this->maxUsers = $params[1];
 			
-			$bot->queue('Ein Turnier mit '.$params[1].' Spielern und einer Teamgröße von '.$params[0].' wurde gestartet. Tippe !join um beizutreten');
+			$bot->queue('Ein Turnier wurde gestartet. Tippe !join um beizutreten');
 			$this->joinActive = true;
 			$this->joinStart = time();
 			$this->joinRoom = $bot->message['roomID'];
@@ -47,7 +56,7 @@ class ModuleTournament extends Module {
 	}
 	
 	protected function end(Bot $bot) {
-		$bot->queue('Die Beitrittphase ist beendet.', $this->joinRoom);
+		$bot->queue('Die Anmeldephase ist beendet.', $this->joinRoom);
 		shuffle($this->joined);
 		$memberID = 1;
 		$teamID = 1;
@@ -57,11 +66,17 @@ class ModuleTournament extends Module {
 			$teamString .= $username;
 			
 			if ($memberID++ == $this->teamSize) {
-				$bot->queue('Team '.$teamID++.': '.$teamString, $this->joinRoom);
+				$bot->queue('Paarung '.$teamID++.': '.$teamString, $this->joinRoom);
 				$memberID = 1;
 				$teamString = '';
 			}
 		}
+
+		if ($memberID != 1) {
+                	$bot->queue('Paarung '.$teamID++.': '.$teamString, $this->joinRoom);
+                        $memberID = 1;
+                        $teamString = '';
+                }
 		$this->reset();
 	}
 }
