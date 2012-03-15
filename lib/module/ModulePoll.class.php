@@ -37,12 +37,12 @@ class ModulePoll extends Module {
 		else if (substr($bot->message['text'], 0, 6) == '!vote ') {
 			$bot->queue('/whisper '.$bot->message['usernameraw'].', Es läuft gerade eine Abstimmung');
 		}
-		else if ($this->voteActive && $bot->message['text'] == '!yes' && !in_array($bot->message['usernameraw'], $this->voted)) {
+		else if ($this->voteActive && $bot->message['roomID'] == $this->voteRoom && $bot->message['text'] == '!yes' && !in_array($bot->message['usernameraw'], $this->voted)) {
 			$this->yes++;
 			$this->voted[] = $bot->message['usernameraw'];
 			$bot->success();
 		}
-		else if ($this->voteActive && $bot->message['text'] == '!no' && !in_array($bot->message['usernameraw'], $this->voted)) {
+		else if ($this->voteActive && $bot->message['roomID'] == $this->voteRoom && $bot->message['text'] == '!no' && !in_array($bot->message['usernameraw'], $this->voted)) {
 			$this->no++;
 			$this->voted[] = $bot->message['usernameraw'];
 			$bot->success();
