@@ -1,7 +1,7 @@
 <?php
 define('USERAGENT', 'PHP/'.phpversion().' ('.php_uname('s').' '.php_uname('r').') Chatbot/2.0');
 if (!defined('API_KEY')) define('API_KEY', '');
-require_once(DIR.'lib/3rdParty/wcfapi/WCFApi.class.php');
+require_once(DIR.'lib/3rdParty/wcfapi/WBBApi.class.php');
 
 /**
  * WCFApi provides methods to externally access a WCF
@@ -10,7 +10,7 @@ require_once(DIR.'lib/3rdParty/wcfapi/WCFApi.class.php');
  * @copyright	2010 - 2011 Tim Düsterhus
  * @licence	GNU Lesser General Public License <http://opensource.org/licenses/lgpl-license.php>
  */
-class Connection extends WCFApi {
+class Connection extends WBBApi {
 	/**
 	 * Joins the chat
 	 *
