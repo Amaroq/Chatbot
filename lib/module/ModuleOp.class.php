@@ -67,6 +67,11 @@ class ModuleOp extends Module {
 			}
 			$bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->op_rooms.': '.implode(', ', $roomString));
 		}
+		else if (preg_match('/^!(mute|ban|gmute|gban)/', Module::removeWhisper($bot->message['text']))) {
+			if (!Core::compareLevel($bot->lookUpUserID(), 'op.moderate')) return $bot->denied();
+			Core::log()->moderate = $bot->message['usernameraw'].': '.Module::removeWhisper($bot->message['text']);
+			$bot->queue('/'.substr(Module::removeWhisper($bot->message['text']), 1));
+		}
 	}
 }
 
