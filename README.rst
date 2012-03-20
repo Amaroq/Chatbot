@@ -32,6 +32,7 @@ userdata.php with the following contents::
 	define('NAME', 'Chatbot'); // Username of the bot-user
 	define('HASH', '7421afc131519d342cd7ab097acfb20ef0143693'); // the login cookie of the bot
 	define('PREFIX', 'wcf_'); // The cookie-prefix of the board
+	define('API_KEY', '1234'); // The API-Key, if you have one, otherwise remove this line
     ?>
 	
 After that you can run the bot on the Commandline-Interpreter (CLI) of PHP by
