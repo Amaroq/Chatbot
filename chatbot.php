@@ -15,6 +15,7 @@ if (file_exists(DIR.'bot.pid')) {
 	echo 'Delete the file '.DIR.'bot.pid is you want to start it anyway'."\n";
 	exit;
 }
+if (file_exists(DIR.'data.sock')) unlink(DIR.'data.sock');
 
 // load userconfig
 require_once(DIR.'config/userdata.php');
