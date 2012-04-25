@@ -47,6 +47,21 @@ class ModuleQuotes extends Module {
 			$this->config->config[$bot->lookUpUserID()] = substr(Module::removeWhisper($bot->message['text']), 10);
 			$bot->success();
 		}
+		else if (substr(Module::removeWhisper($bot->message['text']), 0, 12) == '!forcequote ') {
+			if (!Core::compareLevel($bot->lookUpUserID(), 'quote.force')) return $bot->denied();
+			$data = explode(' ', substr(Module::removeWhisper($bot->message['text']), 12), 2);
+			if (count($data) != 2) return;
+			list($username, $text) = $data;
+			$userID = $bot->lookUpUserID($username);
+                        if ($userID) {
+				$this->config->config[$userID] = $text;
+				$bot->success();
+			}
+                        else {
+                                $bot->queue('/whisper '.$bot->message['usernameraw'].', '.Core::language()->get('user_not_found', array('{user}' => $username)));
+                        }
+
+		}
 		else if (Module::removeWhisper($bot->message['text']) == '!delquote') {
 			unset($this->config->config[$bot->lookUpUserID()]);
 			$bot->success();
