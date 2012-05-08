@@ -92,6 +92,7 @@ class Bot {
 		$this->connection = new Connection(SERVER, ID, null, null, HASH, PREFIX);
 		$this->connection->getSecurityToken();
 		preg_match("/new Chat\(([0-9]+)/", $this->connection->joinChat(), $matches);
+		if (!isset($matches[1])) return $this->shutdown();
 		$this->id = $matches[1];
 		Core::log()->info = 'Successfully connected to server, reading messages from: '.$this->id;
 	}
