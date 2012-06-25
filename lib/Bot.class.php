@@ -107,7 +107,7 @@ class Bot {
 		switch ($signal) {
 			case SIGTERM:
 			case SIGUSR1:
-				
+			case SIGINT:
 				// handle shutdown tasks
 				if ($this->child !== 0) {
 					Core::log()->error = 'Received SIGTERM / SIGUSR1';
@@ -118,7 +118,7 @@ class Bot {
 					fclose($this->incomingSocket);
 					fclose($this->socketServer);
 				}
-				if ($signal === SIGTERM) exit;
+				if ($signal !== SIGUSR1) exit;
 				else exit(2);
 			case SIGCHLD:
 				pcntl_waitpid(-1, $status);
@@ -173,6 +173,7 @@ class Bot {
 
 		// register some functions
 		pcntl_signal(SIGTERM, array($this, 'signalHandler'));
+		pcntl_signal(SIGINT, array($this, 'signalHandler'));
 		pcntl_signal(SIGCHLD, array($this, 'signalHandler'));
 		pcntl_signal(SIGUSR1, array($this, 'signalHandler'));
 		register_shutdown_function(array('Core', 'destruct'));
