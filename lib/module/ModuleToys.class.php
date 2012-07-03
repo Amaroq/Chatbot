@@ -69,7 +69,7 @@ class ModuleToys extends Module {
 			if ($this->rouletteBullet == 0) {
 				$this->rouletteStatus[$bot->message['usernameraw']] += $cost;
 				$bot->queue($message.'Boooom');
-				$bot->queue('/tmute '.$bot->message['usernameraw'].' '.($this->rouletteStatus[$bot->message['usernameraw']]));
+				$bot->queue('/mute '.$bot->message['usernameraw'].' '.($this->rouletteStatus[$bot->message['usernameraw']]));
 				
 				$this->rouletteBullet = rand(1,6);
 			}
