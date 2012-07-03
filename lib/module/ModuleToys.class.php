@@ -21,9 +21,9 @@ class ModuleToys extends Module {
 		}
 
 		if (substr($bot->message['text'], 0, 5) == '!dice') {
-			$command = substr($bot->message['text'], 5);
+			$command = trim(substr($bot->message['text'], 5));
 			$command = explode('d', $command, 2);
-			$command[0] = max(10, intval($command[0]));
+			$command[0] = min(1, max(10, intval($command[0]));
 			
 			while ($command[0]-- > 0) {
 				$results[] = rand(1, intval(count($command) > 1 ? $command[1] : 6));
